@@ -1,0 +1,234 @@
+openapi: 3.0.3
+info:
+  title: NeoMarket B2B (Seller Cabinet)
+  version: '1.0'
+  description: |
+    РљР°Р±РёРЅРµС‚ РїСЂРѕРґР°РІС†Р°. РЎРѕР·РґР°РЅРёРµ С‚РѕРІР°СЂРѕРІ, SKU, СѓРїСЂР°РІР»РµРЅРёРµ С†РµРЅР°РјРё, РЅР°РєР»Р°РґРЅС‹Рµ.
+    РЎРІСЏР·Рё СЃ Moderation Рё B2C вЂ” С‡Р°СЃС‚РёС‡РЅРѕ РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅС‹, РґРµС‚Р°Р»Рё РїСЂРѕРµРєС‚РёСЂСѓСЋС‚СЃСЏ.
+paths:
+  /api/v1/products:
+    post:
+      summary: РЎРѕР·РґР°С‚СЊ С‚РѕРІР°СЂ
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: РўРѕРІР°СЂ СЃРѕР·РґР°РЅ
+  /api/v1/products/{id}:
+    get:
+      summary: РџРѕР»СѓС‡РёС‚СЊ С‚РѕРІР°СЂ СЃРѕ РІСЃРµРјРё SKU
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: РўРѕРІР°СЂ СЃ SKU, С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєР°РјРё Рё С„РѕС‚Рѕ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+              example:
+                id: 42
+                title: iPhone 15 Pro Max
+                description: Р¤Р»Р°РіРјР°РЅ Apple...
+                status: MODERATED
+                category:
+                  id: 3
+                  name: РЎРјР°СЂС‚С„РѕРЅС‹
+                images:
+                  - url: /s3/iphone15-1.jpg
+                    ordering: 0
+                characteristics:
+                  - name: Р‘СЂРµРЅРґ
+                    value: Apple
+                skus:
+                  - id: 101
+                    name: 256GB Black
+                    price: 12999000
+                    activeQuantity: 5
+                    characteristics:
+                      - name: Р¦РІРµС‚
+                        value: Р§С‘СЂРЅС‹Р№
+                      - name: РћР±СЉС‘Рј РїР°РјСЏС‚Рё
+                        value: 256 Р“Р‘
+                  - id: 102
+                    name: 256GB White
+                    price: 12999000
+                    activeQuantity: 0
+        '404':
+          description: РўРѕРІР°СЂ РЅРµ РЅР°Р№РґРµРЅ
+    put:
+      summary: РР·РјРµРЅРёС‚СЊ С‚РѕРІР°СЂ
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: РўРѕРІР°СЂ РѕР±РЅРѕРІР»С‘РЅ
+  /api/v1/skus:
+    post:
+      summary: РЎРѕР·РґР°С‚СЊ SKU
+      tags:
+        - SKU
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: SKU СЃРѕР·РґР°РЅ
+    put:
+      summary: РР·РјРµРЅРёС‚СЊ SKU
+      tags:
+        - SKU
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: SKU РѕР±РЅРѕРІР»С‘РЅ
+  /api/v1/invoices:
+    post:
+      summary: РЎРѕР·РґР°С‚СЊ РЅР°РєР»Р°РґРЅСѓСЋ
+      tags:
+        - Invoices
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: РќР°РєР»Р°РґРЅР°СЏ СЃРѕР·РґР°РЅР°
+  /api/v1/invoices/accept:
+    post:
+      summary: РџСЂРёРЅСЏС‚СЊ РЅР°РєР»Р°РґРЅСѓСЋ (СЃРєР»Р°Рґ)
+      tags:
+        - Invoices
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: РќР°РєР»Р°РґРЅР°СЏ РїСЂРёРЅСЏС‚Р°, РѕСЃС‚Р°С‚РєРё РѕР±РЅРѕРІР»РµРЅС‹
+components:
+  schemas:
+    ProductStatus:
+      type: string
+      enum:
+        - CREATED
+        - ON_MODERATION
+        - MODERATED
+        - BLOCKED
+      description: |
+        CREATED в†’ ON_MODERATION в†’ MODERATED (РѕРїСѓР±Р»РёРєРѕРІР°РЅ)
+        ON_MODERATION в†’ BLOCKED (РјРѕРґРµСЂР°С‚РѕСЂ РѕС‚РєР»РѕРЅРёР»)
+    CategoryRef:
+      type: object
+      description: РЎСЃС‹Р»РєР° РЅР° РєР°С‚РµРіРѕСЂРёСЋ
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: РЎРјР°СЂС‚С„РѕРЅС‹
+    Image:
+      type: object
+      properties:
+        url:
+          type: string
+          example: /s3/iphone15-1.jpg
+        ordering:
+          type: integer
+          example: 0
+    CharacteristicValue:
+      type: object
+      description: РЎРІРѕР№СЃС‚РІРѕ С‚РѕРІР°СЂР° РёР»Рё SKU (Р±СЂРµРЅРґ, С†РІРµС‚, СЂР°Р·РјРµСЂ, РѕР±СЉС‘Рј РїР°РјСЏС‚Рё)
+      properties:
+        name:
+          type: string
+          example: Р‘СЂРµРЅРґ
+        value:
+          type: string
+          example: Apple
+    SKU:
+      type: object
+      description: |
+        РљРѕРЅРєСЂРµС‚РЅС‹Р№ РІР°СЂРёР°РЅС‚ С‚РѕРІР°СЂР° РґР»СЏ РїСЂРѕРґР°Р¶Рё.
+        iPhone 256GB Black = РѕРґРёРЅ SKU, iPhone 256GB White = РґСЂСѓРіРѕР№.
+        РЈ РєР°Р¶РґРѕРіРѕ SKU СЃРІРѕСЏ С†РµРЅР°, Р°СЂС‚РёРєСѓР», РѕСЃС‚Р°С‚РѕРє.
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: 256GB Black
+        price:
+          type: integer
+          description: Р¦РµРЅР° РІ РєРѕРїРµР№РєР°С…
+          example: 12999000
+        activeQuantity:
+          type: integer
+          description: РћСЃС‚Р°С‚РѕРє РЅР° СЃРєР»Р°РґРµ
+          example: 5
+        characteristics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicValue'
+    Product:
+      type: object
+      description: РљР°СЂС‚РѕС‡РєР° С‚РѕРІР°СЂР°
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          $ref: '#/components/schemas/ProductStatus'
+        category:
+          $ref: '#/components/schemas/CategoryRef'
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        characteristics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicValue'
+        skus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SKU'
