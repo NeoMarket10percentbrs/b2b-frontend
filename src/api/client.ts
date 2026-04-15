@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 
 // Base URL for the API - change this to your actual API URL
-const BASE_URL = 'http://b2b-app.neomarket.orb.local:5000';
+const BASE_URL = import.meta.env.VITE_PUBLIC_API_URL;
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: BASE_URL,
