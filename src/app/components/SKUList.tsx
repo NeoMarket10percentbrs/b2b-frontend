@@ -48,8 +48,8 @@ export function SKUList({ productId }: SKUListProps) {
     setIsFormOpen(true);
   };
 
-  const handleDelete = async (skuId: string, skuCode: string) => {
-    if (confirm(`Удалить SKU "${skuCode}"?`)) {
+  const handleDelete = async (skuId: string, article: string) => {
+    if (confirm(`Удалить SKU "${article}"?`)) {
       try {
         setDeletingId(skuId);
         setError('');
@@ -106,7 +106,7 @@ export function SKUList({ productId }: SKUListProps) {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>SKU</TableHead>
+                    <TableHead>Артикул</TableHead>
                     <TableHead>Название</TableHead>
                     <TableHead>Цена</TableHead>
                     <TableHead>Наличие</TableHead>
@@ -116,7 +116,7 @@ export function SKUList({ productId }: SKUListProps) {
                 <TableBody>
                   {skus.map((sku) => (
                     <TableRow key={sku.id}>
-                      <TableCell className="font-medium">{sku.sku}</TableCell>
+                      <TableCell className="font-medium">{sku.article || '-'}</TableCell>
                       <TableCell className="text-muted-foreground">
                         {sku.name || '-'}
                       </TableCell>
@@ -145,7 +145,7 @@ export function SKUList({ productId }: SKUListProps) {
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => handleDelete(sku.id, sku.sku)}
+                            onClick={() => handleDelete(sku.id, sku.article || '')}
                             disabled={deletingId === sku.id}
                             className="h-8 w-8 text-destructive hover:text-destructive"
                           >

@@ -9,7 +9,7 @@ import {
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { Textarea } from './ui/textarea';
+
 import { skusAPI, SKUResponse } from '../../api';
 
 interface SKUFormDialogProps {
@@ -27,11 +27,10 @@ export function SKUFormDialog({
   editingSKU,
   onSkuSaved,
 }: SKUFormDialogProps) {
-  const [sku, setSku] = useState('');
+  const [article, setArticle] = useState('');
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
-  const [description, setDescription] = useState('');
   const [characteristics, setCharacteristics] = useState<Array<{ name: string; value: string }>>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -39,18 +38,16 @@ export function SKUFormDialog({
   useEffect(() => {
     if (open) {
       if (editingSKU) {
-        setSku(editingSKU.sku || '');
+        setArticle(editingSKU.article || '');
         setName(editingSKU.name || '');
         setPrice(editingSKU.price.toString());
         setQuantity(editingSKU.stock_quantity.toString());
-        setDescription(editingSKU.description || '');
         setCharacteristics(editingSKU.characteristics || []);
       } else {
-        setSku('');
+        setArticle('');
         setName('');
         setPrice('');
         setQuantity('');
-        setDescription('');
         setCharacteristics([]);
       }
       setError('');
@@ -78,8 +75,8 @@ export function SKUFormDialog({
   const handleSubmit = async () => {
     setError('');
 
-    if (!sku.trim()) {
-      setError('Введите SKU');
+    if (!article.trim()) {
+      setError('Введите артикул');
       return;
     }
 
@@ -98,11 +95,10 @@ export function SKUFormDialog({
 
       const skuData = {
         product_id: productId,
-        sku: sku.trim(),
+        article: article.trim(),
         name: name.trim() || undefined,
         price: parseFloat(price),
         stock_quantity: parseInt(quantity),
-        description: description.trim() || undefined,
         characteristics: characteristics.filter(c => c.name.trim() || c.value.trim()),
       };
 
@@ -142,12 +138,12 @@ export function SKUFormDialog({
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="sku">SKU (обязательно)</Label>
+              <Label htmlFor="article">Артикул (обязательно)</Label>
               <Input
-                id="sku"
-                placeholder="SKU код"
-                value={sku}
-                onChange={(e) => setSku(e.target.value)}
+                id="article"
+                placeholder="Артикул"
+                value={article}
+                onChange={(e) => setArticle(e.target.value)}
                 required
               />
             </div>
@@ -190,17 +186,6 @@ export function SKUFormDialog({
                 required
               />
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="description">Описание (опционально)</Label>
-            <Textarea
-              id="description"
-              placeholder="Описание SKU"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={3}
-            />
           </div>
 
           <div className="space-y-3">

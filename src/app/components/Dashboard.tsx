@@ -32,7 +32,7 @@ export function Dashboard() {
       setLoading(true);
 
       // Load products
-      const productsResponse = await productsAPI.getProducts(1000, 0);
+      const productsResponse = await productsAPI.getMyProducts(1000, 0);
       const products = productsResponse.items;
 
       // Load all SKUs for all products

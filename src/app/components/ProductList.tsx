@@ -53,7 +53,7 @@ export function ProductList() {
       setCategories(categoriesResponse);
 
       // Load products
-      const productsResponse = await productsAPI.getProducts(100, 0);
+      const productsResponse = await productsAPI.getMyProducts(100, 0);
       const productsData = productsResponse.items;
 
       // Load SKUs for each product to calculate counts

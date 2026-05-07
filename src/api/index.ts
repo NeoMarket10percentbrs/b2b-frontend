@@ -6,3 +6,4 @@ export * from './products';
 export * from './skus';
 export * from './invoices';
 export * from './upload';
+export * from './public';

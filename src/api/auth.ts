@@ -8,12 +8,12 @@ export const authAPI = {
   },
 
   login: async (username: string, password: string): Promise<TokenResponse> => {
-    const formData = new FormData();
-    formData.append('username', username);
-    formData.append('password', password);
-    formData.append('grant_type', 'password');
+    const params = new URLSearchParams();
+    params.append('username', username);
+    params.append('password', password);
+    params.append('grant_type', 'password');
 
-    const response = await apiClient.post('/api/auth/login', formData, {
+    const response = await apiClient.post('/api/auth/login', params, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },

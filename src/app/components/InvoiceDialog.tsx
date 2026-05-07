@@ -46,7 +46,7 @@ export function InvoiceDialog({ open, onOpenChange, onInvoiceCreated }: InvoiceD
     try {
       setLoading(true);
       // Load all products first
-      const productsResponse = await productsAPI.getProducts(1000, 0);
+      const productsResponse = await productsAPI.getMyProducts(1000, 0);
       const products = productsResponse.items;
 
       // Load SKUs for all products

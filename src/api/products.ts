@@ -10,12 +10,12 @@ import {
 } from './types';
 
 export const productsAPI = {
-  getProducts: async (limit?: number, offset?: number): Promise<ProductListResponse> => {
+  getMyProducts: async (limit?: number, offset?: number): Promise<ProductListResponse> => {
     const params = new URLSearchParams();
     if (limit !== undefined) params.append('limit', limit.toString());
     if (offset !== undefined) params.append('offset', offset.toString());
 
-    const response = await apiClient.get(`/api/products?${params}`);
+    const response = await apiClient.get(`/api/products/my?${params}`);
     return response.data;
   },
 

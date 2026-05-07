@@ -15,7 +15,7 @@ interface AuthContextType {
     company_name: string;
     phone?: string;
   }) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -89,7 +89,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    const refreshToken = localStorage.getItem('refresh_token');
+    if (refreshToken) {
+      try {
+        await authAPI.logout({ refresh_token: refreshToken });
+      } catch (error) {
+        console.error('Logout API call failed:', error);
+      }
+    }
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     setUser(null);
